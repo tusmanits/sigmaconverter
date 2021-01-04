@@ -1,4 +1,4 @@
-{% macro get_fields(view_name) %}
+{% macro get_view_fields(view_name) %}
 
 {% set get_fields_query %}
 select 
@@ -8,11 +8,10 @@ select
         WHEN TYPE = 'number' THEN 'NUMBER(38,10)'
         WHEN TYPE = 'string' THEN 'VARCHAR'
         WHEN TYPE LIKE '%date%' THEN 'DATETIME'
-        WHEN TYPE = 'zipcode' THEN 'VARCHAR'
     END)
     AS TYPE
 from public.fields
-where UPPER(view) = '{{view_name}}' AND UPPER(TYPE) NOT LIKE UPPER('DATE%')
+where UPPER(view) = '{{view_name}}'
 {% endset %}
 
 {% set results = dbt_utils.get_query_results_as_dict(get_fields_query) %}
@@ -21,7 +20,9 @@ where UPPER(view) = '{{view_name}}' AND UPPER(TYPE) NOT LIKE UPPER('DATE%')
 
 {% for NAME in results.NAME %}
 
+
 {% set v = results.NAME[loop.index0] ~ ' ' ~ results.TYPE[loop.index0] %}
+
 
 {{ columns_list.append(v) }}
 

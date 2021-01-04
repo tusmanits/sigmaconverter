@@ -1,10 +1,9 @@
 {% macro get_view_names() %}
 
 {% set get_views_query %}
-select distinct
-view
-from public.fields
-where view = 'distribution_centers'
+SELECT DISTINCT
+UPPER(VIEW)
+FROM PUBLIC.FIELDS
 {% endset %}
 
 {% set results = run_query(get_views_query) %}
